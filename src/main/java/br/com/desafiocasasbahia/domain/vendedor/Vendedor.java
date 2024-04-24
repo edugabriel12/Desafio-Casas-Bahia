@@ -41,6 +41,7 @@ public class Vendedor {
     private String email;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private TipoContratacao tipoContratacao;
 
     @ManyToOne
