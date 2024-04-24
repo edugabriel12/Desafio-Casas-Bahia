@@ -1,4 +1,4 @@
-package br.com.desafiocasasbahia.domain;
+package br.com.desafiocasasbahia.domain.vendedor;
 
 import br.com.desafiocasasbahia.domain.enums.TipoContratacao;
 import br.com.desafiocasasbahia.responseFeign.Filial;

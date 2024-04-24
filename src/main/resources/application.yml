@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: desafio-casas-bahia
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/vendedores_DB
+    username: postgres
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+  flyway:
+    url: jdbc:postgresql://localhost:5432/
+    schemas: vendedores_DB
+    user: postgres
+    password: root
