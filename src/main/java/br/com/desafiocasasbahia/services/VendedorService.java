@@ -69,11 +69,7 @@ public class VendedorService {
 
     public VendedorAtualizadoResponse atualizaVendedor(Long id, VendedorDTO vendedorRequest) throws Exception {
 
-        Optional<Vendedor> vendedorOptional = repository.findById(id);
-        if (vendedorOptional.isEmpty())
-            throw new Exception("Vendedor não encontrado com id: " + id);
-
-        Vendedor vendedor = vendedorOptional.get();
+        Vendedor vendedor = findVendedorById(id);
         vendedor.setNome(vendedorRequest.nome());
         vendedor.setSobrenome(vendedorRequest.sobrenome());
         vendedor.setDataNascimento(formataData(vendedorRequest.dataNascimento()));
@@ -84,6 +80,14 @@ public class VendedorService {
                 vendedor.getNome(),
                 vendedor.getSobrenome(),
                 vendedor.getDataNascimento());
+    }
+
+    public Vendedor removeVendedor(Long id) throws Exception {
+        Vendedor vendedor = findVendedorById(id);
+
+        repository.delete(vendedor);
+
+        return vendedor;
     }
 
     public void checaSeVendedorExiste(String documento, String email) throws Exception {
@@ -148,5 +152,13 @@ public class VendedorService {
         }
 
         return sequencial + "-" + tipoVendedor;
+    }
+
+    public Vendedor findVendedorById(Long id) throws Exception {
+        Optional<Vendedor> vendedorOptional = repository.findById(id);
+        if (vendedorOptional.isEmpty())
+            throw new Exception("Vendedor não encontrado com id: " + id);
+
+        return vendedorOptional.get();
     }
 }

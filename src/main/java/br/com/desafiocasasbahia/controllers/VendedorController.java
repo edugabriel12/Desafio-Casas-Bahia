@@ -29,6 +29,13 @@ public class VendedorController {
         return ResponseEntity.ok(vendedores);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Vendedor> getVendedor(@PathVariable(name = "id") Long id) throws Exception {
+        Vendedor vendedor = service.findVendedorById(id);
+
+        return ResponseEntity.ok(vendedor);
+    }
+
     @PostMapping
     public ResponseEntity<Vendedor> cadastraVendedor(@RequestBody @Valid VendedorDTO vendedorRequest) throws Exception {
         service.checaSeVendedorExiste(vendedorRequest.documento(), vendedorRequest.email());
@@ -45,5 +52,13 @@ public class VendedorController {
 
         VendedorAtualizadoResponse response = service.atualizaVendedor(id, vendedorRequest);
         return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @Transactional
+    public ResponseEntity<Vendedor> removeVendedor(@PathVariable(name = "id") Long id) throws Exception {
+        Vendedor vendedor = service.removeVendedor(id);
+
+        return ResponseEntity.ok(vendedor);
     }
 }
