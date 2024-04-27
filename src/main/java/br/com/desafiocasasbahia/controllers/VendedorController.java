@@ -27,4 +27,12 @@ public class VendedorController {
         return ResponseEntity.ok(vendedores);
     }
 
+    @PostMapping
+    public ResponseEntity<Vendedor> cadastraVendedor(@RequestBody VendedorDTO vendedorRequest) throws Exception {
+        service.checaSeVendedorExiste(vendedorRequest.documento(), vendedorRequest.email());
+        service.validaDocumentoVendedor(vendedorRequest.documento(), vendedorRequest.tipoContratacao());
+        service.cadastraVendedor(vendedorRequest);
+
+        return ResponseEntity.ok().build();
+    }
 }

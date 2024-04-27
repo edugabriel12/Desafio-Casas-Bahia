@@ -25,6 +25,6 @@ public class Filial {
     private String cidade;
     private String UF;
     private String tipo;
-    private LocalDate dataCadastro;
-    private LocalDateTime ultimaAtualizacao;
+    private String dataCadastro;
+    private String ultimaAtualizacao;
 }
