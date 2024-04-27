@@ -12,6 +12,8 @@ import br.com.desafiocasasbahia.response.VendedorAtualizadoResponse;
 import br.com.desafiocasasbahia.response.feign.FilialResponse;
 import br.com.desafiocasasbahia.strategy.TipoVendedorInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -38,8 +40,8 @@ public class VendedorService {
         this.filialRepository = filialRepository;
     }
 
-    public List<Vendedor> getVendedores() {
-        return repository.findAll();
+    public Page<Vendedor> getVendedores(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     public void validaDocumentoVendedor(String documento, TipoContratacao tipoContratacao) throws Exception {

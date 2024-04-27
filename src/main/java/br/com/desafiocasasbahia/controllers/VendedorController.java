@@ -7,10 +7,11 @@ import br.com.desafiocasasbahia.services.VendedorService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/vendedores")
@@ -24,9 +25,14 @@ public class VendedorController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Vendedor>> getVendedores(){
-        List<Vendedor> vendedores = service.getVendedores();
-        return ResponseEntity.ok(vendedores);
+    public ResponseEntity<Page<Vendedor>> getVendedores(
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "limit", defaultValue = "10") Integer limit
+    ){
+
+
+        Pageable pageable = PageRequest.of(page, limit);
+        return ResponseEntity.ok(service.getVendedores(pageable));
     }
 
     @GetMapping("/{id}")
