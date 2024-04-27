@@ -37,7 +37,6 @@ public class Vendedor {
     private String documento;
 
     @Column(nullable = false)
-    @Email
     private String email;
 
     @Enumerated(EnumType.STRING)

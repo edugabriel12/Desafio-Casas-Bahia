@@ -1,6 +1,6 @@
 package br.com.desafiocasasbahia.proxy;
 
-import br.com.desafiocasasbahia.responseFeign.FilialResponse;
+import br.com.desafiocasasbahia.response.feign.FilialResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,4 +1,4 @@
-package br.com.desafiocasasbahia.responseFeign;
+package br.com.desafiocasasbahia.response.feign;
 
 
 public record FilialResponse(String nome, String documento, String cidade,

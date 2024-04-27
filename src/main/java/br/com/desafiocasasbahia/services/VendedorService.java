@@ -8,7 +8,8 @@ import br.com.desafiocasasbahia.helpers.VendedorValidator;
 import br.com.desafiocasasbahia.proxy.FilialProxy;
 import br.com.desafiocasasbahia.repositories.FilialRepository;
 import br.com.desafiocasasbahia.repositories.VendedorRepository;
-import br.com.desafiocasasbahia.responseFeign.FilialResponse;
+import br.com.desafiocasasbahia.response.VendedorAtualizadoResponse;
+import br.com.desafiocasasbahia.response.feign.FilialResponse;
 import br.com.desafiocasasbahia.strategy.TipoVendedorInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -64,6 +65,25 @@ public class VendedorService {
 
         repository.save(vendedor);
         filialRepository.save(filial);
+    }
+
+    public VendedorAtualizadoResponse atualizaVendedor(Long id, VendedorDTO vendedorRequest) throws Exception {
+
+        Optional<Vendedor> vendedorOptional = repository.findById(id);
+        if (vendedorOptional.isEmpty())
+            throw new Exception("Vendedor não encontrado com id: " + id);
+
+        Vendedor vendedor = vendedorOptional.get();
+        vendedor.setNome(vendedorRequest.nome());
+        vendedor.setSobrenome(vendedorRequest.sobrenome());
+        vendedor.setDataNascimento(formataData(vendedorRequest.dataNascimento()));
+
+        repository.save(vendedor);
+
+        return new VendedorAtualizadoResponse(
+                vendedor.getNome(),
+                vendedor.getSobrenome(),
+                vendedor.getDataNascimento());
     }
 
     public void checaSeVendedorExiste(String documento, String email) throws Exception {
