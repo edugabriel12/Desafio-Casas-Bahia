@@ -4,6 +4,8 @@ import br.com.desafiocasasbahia.domain.dtos.VendedorDTO;
 import br.com.desafiocasasbahia.domain.enums.TipoContratacao;
 import br.com.desafiocasasbahia.domain.vendedor.Filial;
 import br.com.desafiocasasbahia.domain.vendedor.Vendedor;
+import br.com.desafiocasasbahia.exceptions.UserAlreadyExistsException;
+import br.com.desafiocasasbahia.exceptions.UserNotFoundException;
 import br.com.desafiocasasbahia.helpers.VendedorValidator;
 import br.com.desafiocasasbahia.proxy.FilialProxy;
 import br.com.desafiocasasbahia.repositories.FilialRepository;
@@ -17,9 +19,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -44,12 +46,12 @@ public class VendedorService {
         return repository.findAll(pageable);
     }
 
-    public void validaDocumentoVendedor(String documento, TipoContratacao tipoContratacao) throws Exception {
+    public void validaDocumentoVendedor(String documento, TipoContratacao tipoContratacao)  {
         TipoVendedorInterface tipoVendedorInterface = tipoContratacao.getVendedorStrategy();
         tipoVendedorInterface.validaDocumento(documento);
     }
 
-    public void cadastraVendedor(VendedorDTO vendedorRequest) throws Exception {
+    public void cadastraVendedor(VendedorDTO vendedorRequest)  {
         LocalDate dataNascimento = formataData(vendedorRequest.dataNascimento());
         String matricula = geraMatriculaSequencial(vendedorRequest.tipoContratacao());
         Filial filial = getFilial(vendedorRequest.documentoFilial());
@@ -69,7 +71,7 @@ public class VendedorService {
         filialRepository.save(filial);
     }
 
-    public VendedorAtualizadoResponse atualizaVendedor(Long id, VendedorDTO vendedorRequest) throws Exception {
+    public VendedorAtualizadoResponse atualizaVendedor(Long id, VendedorDTO vendedorRequest)  {
 
         Vendedor vendedor = findVendedorById(id);
         vendedor.setNome(vendedorRequest.nome());
@@ -84,7 +86,7 @@ public class VendedorService {
                 vendedor.getDataNascimento());
     }
 
-    public Vendedor removeVendedor(Long id) throws Exception {
+    public Vendedor removeVendedor(Long id)  {
         Vendedor vendedor = findVendedorById(id);
 
         repository.delete(vendedor);
@@ -92,19 +94,19 @@ public class VendedorService {
         return vendedor;
     }
 
-    public void checaSeVendedorExiste(String documento, String email) throws Exception {
+    public void checaSeVendedorExiste(String documento, String email)  {
         boolean vendedorExiste = repository.findByDocumento(documento).isPresent();
 
-        if (vendedorExiste) throw new Exception("Vendedor com documento: "
+        if (vendedorExiste) throw new UserAlreadyExistsException("Vendedor com documento: "
                 + documento + " já existe");
 
         vendedorExiste = repository.findByEmail(email).isPresent();
 
-        if (vendedorExiste) throw new Exception("Vendedor com email: "
+        if (vendedorExiste) throw new UserAlreadyExistsException("Vendedor com email: "
                 + email + " já existe");
     }
 
-    private Filial getFilial(String cnpj) throws Exception {
+    private Filial getFilial(String cnpj)  {
         Optional<Filial> filialOptional = filialRepository.getFilialByDocumento(cnpj);
 
         if (filialOptional.isPresent()) {
@@ -124,17 +126,18 @@ public class VendedorService {
     }
 
 
-    private FilialResponse getFilialProxy(String cnpj) throws Exception {
+    private FilialResponse getFilialProxy(String cnpj)  {
         ResponseEntity<FilialResponse> response = proxy.getFilial(cnpj);
 
         if (response.getBody() == null)
-            throw new Exception("Filial não encontrada com CNPJ: " + cnpj);
+            throw new UserNotFoundException("Filial não encontrada com CNPJ: " + cnpj);
 
         return response.getBody();
     }
 
-    private LocalDate formataData(String data) throws Exception {
-        if (!VendedorValidator.validaData(data)) throw new Exception("Data de nascimento inválida!");
+    private LocalDate formataData(String data)  {
+        if (!VendedorValidator.validaData(data)) throw new 
+                DateTimeException("Data de nascimento inválida!");
 
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -156,10 +159,10 @@ public class VendedorService {
         return sequencial + "-" + tipoVendedor;
     }
 
-    public Vendedor findVendedorById(Long id) throws Exception {
+    public Vendedor findVendedorById(Long id)  {
         Optional<Vendedor> vendedorOptional = repository.findById(id);
         if (vendedorOptional.isEmpty())
-            throw new Exception("Vendedor não encontrado com id: " + id);
+            throw new UserNotFoundException("Vendedor não encontrado com id: " + id);
 
         return vendedorOptional.get();
     }

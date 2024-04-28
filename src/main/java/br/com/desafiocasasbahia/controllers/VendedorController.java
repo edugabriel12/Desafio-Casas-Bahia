@@ -36,14 +36,14 @@ public class VendedorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Vendedor> getVendedor(@PathVariable(name = "id") Long id) throws Exception {
+    public ResponseEntity<Vendedor> getVendedor(@PathVariable(name = "id") Long id)  {
         Vendedor vendedor = service.findVendedorById(id);
 
         return ResponseEntity.ok(vendedor);
     }
 
     @PostMapping
-    public ResponseEntity<Vendedor> cadastraVendedor(@RequestBody @Valid VendedorDTO vendedorRequest) throws Exception {
+    public ResponseEntity<Vendedor> cadastraVendedor(@RequestBody @Valid VendedorDTO vendedorRequest)  {
         service.checaSeVendedorExiste(vendedorRequest.documento(), vendedorRequest.email());
         service.validaDocumentoVendedor(vendedorRequest.documento(), vendedorRequest.tipoContratacao());
         service.cadastraVendedor(vendedorRequest);
@@ -54,7 +54,7 @@ public class VendedorController {
     @PutMapping("/update/{id}")
     @Transactional
     public ResponseEntity<VendedorAtualizadoResponse> atualizaVendedor(@PathVariable(name = "id") Long id
-            , @RequestBody @Valid VendedorDTO vendedorRequest) throws Exception {
+            , @RequestBody @Valid VendedorDTO vendedorRequest)  {
 
         VendedorAtualizadoResponse response = service.atualizaVendedor(id, vendedorRequest);
         return ResponseEntity.ok(response);
@@ -62,7 +62,7 @@ public class VendedorController {
 
     @DeleteMapping("/delete/{id}")
     @Transactional
-    public ResponseEntity<Vendedor> removeVendedor(@PathVariable(name = "id") Long id) throws Exception {
+    public ResponseEntity<Vendedor> removeVendedor(@PathVariable(name = "id") Long id)  {
         Vendedor vendedor = service.removeVendedor(id);
 
         return ResponseEntity.ok(vendedor);
