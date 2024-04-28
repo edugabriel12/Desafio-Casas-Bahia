@@ -14,3 +14,15 @@ spring:
     schemas: vendedores_DB
     user: postgres
     password: root
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'health, metrics'
+    enabled-by-default: false
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+    metrics:
+      enabled: true

@@ -62,16 +62,4 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(treatedException);
     }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    private ResponseEntity<RestExceptionHandlerResponse> invalidEmailHandler(
-            MethodArgumentNotValidException exception) {
-        RestExceptionHandlerResponse treatedException = new RestExceptionHandlerResponse(
-                HttpStatus.BAD_REQUEST.name(),
-                HttpStatus.BAD_REQUEST.value(),
-                exception.getMessage()
-        );
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(treatedException);
-    }
 }
