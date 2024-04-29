@@ -18,11 +18,11 @@ management:
   endpoints:
     web:
       exposure:
-        include: 'health, metrics'
+        include: 'health, prometheus'
     enabled-by-default: false
   endpoint:
     health:
       enabled: true
       show-details: always
-    metrics:
+    prometheus:
       enabled: true
