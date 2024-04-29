@@ -67,8 +67,8 @@ public class VendedorService {
                 .filial(filial)
                 .build();
 
-        repository.save(vendedor);
         filialRepository.save(filial);
+        repository.save(vendedor);
     }
 
     public VendedorAtualizadoResponse atualizaVendedor(Long id, VendedorDTO vendedorRequest)  {
